@@ -9,6 +9,9 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(FetchContent)
+set(FETCHCONTENT_BASE_DIR "${PROJECT_SOURCE_DIR}/extern") 
+
 #set on when you want to release the project 
 set(PRODUCTION_BUILD OFF CACHE BOOL "Production build" FORCE)
 
@@ -30,28 +33,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OutputDir}")
 #use the --config Debug option for select the configuration  
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-#include(FetchContent)
-##Fetch GLFW
-#Fetchcontent_Declare(
-#    glfw
-#    GIT_REPOSITORY https://github.com/glfw/glfw
-#    GIT_TAG 3.4
-#)
-#
-#FetchContent_MakeAvailable(glfw)
-##Fetch GLAD
-#FetchContent_Declare(
-#    glad
-#    GIT_REPOSITORY https://github.com/Dav1dde/glad
-#    GIT_TAG 2.0.8
-#)
-#FetchContent_MakeAvailable(glad)
-##link
-#target_link_libraries(main PRIVATE glfw glad)
-#
-##include GLAD headers
-#target_include_directories(main PRIVATE ${glad_SOURCE_DIR}/include)
-
 #MACRO for the resouces
 if(PRODUCTION_BUILD)
     target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC RESOURCE_PATH="./res/")
@@ -63,6 +44,26 @@ endif()
 
 #include headers
 include_directories("${PROJECT_SOURCE_DIR}/include/")
+
+
+
+#Fetch GLFW
+Fetchcontent_Declare(
+    glfw
+    GIT_REPOSITORY https://github.com/glfw/glfw
+    GIT_TAG 3.4
+)
+
+FetchContent_MakeAvailable(glfw)
+#Fetch GLAD
+FetchContent_Declare(
+    glad
+    GIT_REPOSITORY https://github.com/Dav1dde/glad
+    GIT_TAG v2.0.8
+)
+FetchContent_MakeAvailable(glad)
+add_subdirectory("${glad_SOURCE_DIR}/cmake" glad_cmake)
+glad_add_library(glad_gl_core_mx_33 REPRODUCIBLE MX API gl:core=3.3)
 
 find_package(OpenGL REQUIRED)
 

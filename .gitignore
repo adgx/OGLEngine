@@ -7,3 +7,6 @@ assets/textures
 .vs/
 .idea/
 CMakeSettings.json
+
+/extern/*
+!/extern/CMakeLists.txt
