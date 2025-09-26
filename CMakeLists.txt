@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.10.0)
 project(OGLEngine LANGUAGES C CXX)
 
 set(OSBitness 32)
@@ -19,7 +19,6 @@ else()
 endif()
 
 if(MSVC)
-    target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC _CTR_SECURE_NO_WARNINGS)
     add_compile_options(/arch:AVX2)
 endif()
 
@@ -55,15 +54,15 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 #MACRO for the resouces
 if(PRODUCTION_BUILD)
-target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC RESOURCE_PATH="./res/")
-target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC PRODUCTION_BUILD=1)
+    target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC RESOURCE_PATH="./res/")
+    target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC PRODUCTION_BUILD=1)
 elseif()
-target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC RESOURCE_PATH="${CMAKE_CURRENT_SOURCE_DIR}/res/")
-target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC PRODUCTION_BUILD=0)
+    target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC RESOURCE_PATH="${CMAKE_CURRENT_SOURCE_DIR}/res/")
+    target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC PRODUCTION_BUILD=0)
 endif()
 
 #include headers
-target_include_directories(main PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
+include_directories("${PROJECT_SOURCE_DIR}/include/")
 
 find_package(OpenGL REQUIRED)
 

@@ -1,0 +1,40 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 10,
+        "patch": 0        
+    },
+    "configurePresets": [
+        {
+            "name": "vs2022-debug",
+            "description": "Generate for Visual Studio 2022, Debug, x64",
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "vs2022-release",
+            "description": "Generate for Visual Studio 2022, Release, x64",
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "build-debug",
+            "configurePreset": "vs2022-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "build-release",
+            "configurePreset": "vs2022-release",
+            "configuration": "Release"
+        }
+    ]
+}

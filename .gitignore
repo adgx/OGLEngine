@@ -2,6 +2,8 @@ out/
 bin/
 build/
 res/
+assets/meshes
+assets/textures
 .vs/
 .idea/
 CMakeSettings.json
