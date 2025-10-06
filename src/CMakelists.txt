@@ -1,4 +1,4 @@
 add_executable(Main main.cpp)
 target_link_libraries(Main PRIVATE glfw
-    PRIVATE glad_gl_core_mx_33
+    PRIVATE glad_gl_core_33
     PRIVATE OpenGL::GL)

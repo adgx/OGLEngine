@@ -45,8 +45,6 @@ endif()
 #include headers
 include_directories("${PROJECT_SOURCE_DIR}/include/")
 
-
-
 #Fetch GLFW
 Fetchcontent_Declare(
     glfw
@@ -62,8 +60,9 @@ FetchContent_Declare(
     GIT_TAG v2.0.8
 )
 FetchContent_MakeAvailable(glad)
+
 add_subdirectory("${glad_SOURCE_DIR}/cmake" glad_cmake)
-glad_add_library(glad_gl_core_mx_33 REPRODUCIBLE MX API gl:core=3.3)
+glad_add_library(glad_gl_core_33 REPRODUCIBLE LOADER API gl:core=3.3)
 
 find_package(OpenGL REQUIRED)
 

@@ -11,6 +11,7 @@
             "description": "Generate for Visual Studio 2022, Debug, x64",
             "generator": "Visual Studio 17 2022",
             "architecture": "x64",
+            "binaryDir": "${sourceDir}/build/vs2022-debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
