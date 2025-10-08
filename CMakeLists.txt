@@ -51,8 +51,8 @@ Fetchcontent_Declare(
     GIT_REPOSITORY https://github.com/glfw/glfw
     GIT_TAG 3.4
 )
-
 FetchContent_MakeAvailable(glfw)
+
 #Fetch GLAD
 FetchContent_Declare(
     glad
@@ -60,6 +60,22 @@ FetchContent_Declare(
     GIT_TAG v2.0.8
 )
 FetchContent_MakeAvailable(glad)
+
+#Fetch glm
+FetchContent_Declare(
+    glm 
+    GIT_REPOSITORY https://github.com/g-truc/glm/tree/1.0.1
+    GIT_TAG 1.0.1
+)
+FetchContent_MakeAvailable(glm)
+
+#Fetch assimp
+FetchContent_Declare(
+    assimp 
+    GIT_REPOSITORY https://github.com/assimp/assimp
+    GIT_TAG v6.0.2
+)
+FetchContent_MakeAvailable(assimp)
 
 add_subdirectory("${glad_SOURCE_DIR}/cmake" glad_cmake)
 glad_add_library(glad_gl_core_33 REPRODUCIBLE LOADER API gl:core=3.3)
