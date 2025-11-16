@@ -1,6 +1,11 @@
 #pragma once
 
-class Renderer
+namespace SpaceEngine
 {
-    bool debug;
+    class Renderer
+    {
+        Renderer();
+        ~Renderer();
+        bool debug;
+    };
 };

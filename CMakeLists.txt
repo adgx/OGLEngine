@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(SpaceshipGame LANGUAGES C CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(OSBitness 32)
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(OSBitness 64)
@@ -42,9 +43,6 @@ elseif()
     target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC PRODUCTION_BUILD=0)
 endif()
 
-#include headers
-include_directories("${PROJECT_SOURCE_DIR}/include/")
-
 #Fetch GLFW
 Fetchcontent_Declare(
     glfw
@@ -81,6 +79,14 @@ add_subdirectory("${glad_SOURCE_DIR}/cmake" glad_cmake)
 glad_add_library(glad_gl_core_33 REPRODUCIBLE LOADER API gl:core=3.3)
 
 find_package(OpenGL REQUIRED)
+
+#include headers project
+include_directories("${PROJECT_SOURCE_DIR}/include/")
+#include headers externs
+#Glad headers
+include_directories("${PROJECT_SOURCE_DIR}/build/gladsources/glad_gl_core_33/include")
+#GLFW headers
+include_directories("${PROJECT_SOURCE_DIR}/extern/glfw-src/include")
 
 # Add subdirectories
 add_subdirectory("extern")

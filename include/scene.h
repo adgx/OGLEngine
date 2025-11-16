@@ -1,6 +1,6 @@
 #pragma one
 
-namespace SpaceshipEngine
+namespace SpaceEngine
 {
     class Scene
     {
