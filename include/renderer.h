@@ -4,8 +4,10 @@ namespace SpaceEngine
 {
     class Renderer
     {
-        Renderer();
-        ~Renderer();
-        bool debug;
+        public:
+            Renderer();
+            ~Renderer();
+        private:
+            bool debug;
     };
 };

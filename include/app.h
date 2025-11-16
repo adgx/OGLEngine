@@ -13,8 +13,8 @@ namespace SpaceEngine
             ~App();
             void Run();
         private:
-            bool handelInput();
-            bool setupGLFW();
+            void handelInput();
+            bool setUpGLFW();
         
         Scene* scene;
         Renderer* renderer;
