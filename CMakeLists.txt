@@ -67,6 +67,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glm)
 
+#Fetch spdlog
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY https://github.com/gabime/spdlog
+    GIT_TAG v1.16.0
+)
+FetchContent_MakeAvailable(spdlog)
+
 #Fetch assimp
 FetchContent_Declare(
     assimp 
