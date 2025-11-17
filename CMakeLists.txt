@@ -43,6 +43,7 @@ elseif()
     target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC PRODUCTION_BUILD=0)
 endif()
 
+#modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(FindDirsCmakeFile)
 
@@ -98,6 +99,8 @@ include_directories("${PROJECT_SOURCE_DIR}/include/")
 include_directories("${PROJECT_SOURCE_DIR}/build/gladsources/glad_gl_core_33/include")
 #GLFW headers
 include_directories("${PROJECT_SOURCE_DIR}/extern/glfw-src/include")
+#spdlog headers
+include_directories("${PROJECT_SOURCE_DIR}/extern/spdlog-src/include")
 
 # Add subdirectories
 add_subdirectory("extern")

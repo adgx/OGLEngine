@@ -1,16 +1,22 @@
 #include "app.h"
+#include "log.h"
 #include <iostream>
 
 namespace SpaceEngine{
     App::App()
     {
         setUpGLFW();
+        //initialize Managers
+        logManager.Initialize();
+        //Objects
         scene = new Scene();
         renderer = new Renderer();
     }
     
     App::~App()
     {
+        //Shutdown Managers
+        logManager.Shoutdown();
         delete scene;
         delete renderer;
         glfwTerminate();
@@ -18,7 +24,7 @@ namespace SpaceEngine{
 
     void App::Run()
     {
-        std::cout << "App - GameLoop" << std::endl; 
+        SPACE_ENGINE_TRACE("App - GameLoop"); 
 
         while(!glfwWindowShouldClose(window))
         {
@@ -39,7 +45,7 @@ namespace SpaceEngine{
 
     bool App::setUpGLFW()
     {
-        std::cout << "App - set up GLFW" << std::endl;
+        SPACE_ENGINE_TRACE("App - set up GLFW");
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
