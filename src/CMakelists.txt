@@ -1,3 +1,4 @@
+find_dirs_Cmakefile()
 add_executable(Main main.cpp)
 #App library
 add_library(App STATIC app.cpp renderer.cpp scene.cpp)

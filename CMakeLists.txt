@@ -43,6 +43,9 @@ elseif()
     target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC PRODUCTION_BUILD=0)
 endif()
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+include(FindDirsCmakeFile)
+
 #Fetch GLFW
 Fetchcontent_Declare(
     glfw
