@@ -6,6 +6,10 @@ target_link_libraries(Logmanager PUBLIC spdlog
 #macros
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Macro SPACE_ENGINE_DEBUG defined")
-    target_compile_definitions(Logmanager PUBLIC SPACE_ENGINE_DEBUG=1)
+    target_compile_definitions(Logmanager PUBLIC SPACE_ENGINE_DEBUG_CONFIG=1)
+if(WIN32)
+    message("Macro SPACE_ENGINE_PLATFORM_WINDOWS defined")
+    target_compile_definitions(Logmanager PUBLIC SPACE_ENGINE_PLATFORM_WINDOWS=1)
+endif()
 endif()
 set_target_properties(Logmanager PROPERTIES FOLDER "Logmanager")

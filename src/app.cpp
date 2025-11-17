@@ -1,6 +1,5 @@
 #include "app.h"
 #include "log.h"
-#include <iostream>
 
 namespace SpaceEngine{
     App::App()
@@ -11,6 +10,7 @@ namespace SpaceEngine{
         //Objects
         scene = new Scene();
         renderer = new Renderer();
+        SPACE_ENGINE_INFO("Initilization app done");
     }
     
     App::~App()
@@ -24,7 +24,7 @@ namespace SpaceEngine{
 
     void App::Run()
     {
-        SPACE_ENGINE_TRACE("App - GameLoop"); 
+        SPACE_ENGINE_DEBUG("App - GameLoop"); 
 
         while(!glfwWindowShouldClose(window))
         {
@@ -55,7 +55,7 @@ namespace SpaceEngine{
 
         if(window == nullptr)
         {
-            std::cout << "Failed to create GLFW window" << std::endl;
+            SPACE_ENGINE_ERROR("Failed to create GLFW window");
             return false;
         }
 
@@ -65,7 +65,7 @@ namespace SpaceEngine{
 
         if(version == 0)
         {
-            std::cout << "Failed to initilize OpenGL Context" << std::endl;
+            SPACE_ENGINE_ERROR("Failed to initilize OpenGL Context");
             return false;
         }
 
@@ -73,7 +73,7 @@ namespace SpaceEngine{
             glViewport(0, 0, width, height);
         });
 
-        std::cout<< "App - GLFW setup done" << std::endl;
+        SPACE_ENGINE_ERROR("App - GLFW setup done");
         return true;
     }
 
