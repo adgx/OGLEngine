@@ -1,9 +1,10 @@
 #pragma once
 #include "renderer.h"
 #include "scene.h"
-#include "managers/logmanager.h"
+#include "managers/logManager.h"
+#include "managers/inputManager.h"
+#include "managers/windowManager.h"
 #include <glad/gl.h>
-#include <GLFW/glfw3.h>
 
 namespace SpaceEngine
 {
@@ -14,14 +15,12 @@ namespace SpaceEngine
             ~App();
             void Run();
         private:
-            void handelInput();
-            bool setUpGLFW();
-        
             //managers
-            Managers::LogManager logManager; 
+            Managers::LogManager logManager;
+            Managers::Input inputManager;
             //Objects
             Scene* scene;
             Renderer* renderer;
-            GLFWwindow* window;
+            Managers::Window windowManager;
     };
 };

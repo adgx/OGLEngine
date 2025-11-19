@@ -7,13 +7,16 @@ add_library(App STATIC app.cpp renderer.cpp scene.cpp)
 target_include_directories(App PRIVATE ${CMAKE_SOURCE_DIR}/include/
                             PRIVATE ${CMAKE_SOURCE_DIR}/include/managers)
 
-target_link_libraries(App PRIVATE glfw
+target_link_libraries(App PRIVATE WindowManager
     PUBLIC glad_gl_core_33
     PRIVATE OpenGL::GL
-    PRIVATE Logmanager)
+    PRIVATE LogManager
+    PRIVATE InputManager)
 
 target_include_directories(Main PRIVATE ${CMAKE_SOURCE_DIR}/include/)
 
-target_link_libraries(Main PRIVATE App
-                        PRIVATE Logmanager)
+target_link_libraries(Main PRIVATE WindowManager 
+                        PRIVATE App
+                        PRIVATE LogManager
+                        PRIVATE InputManager)
 set_target_properties(App PROPERTIES FOLDER "App")

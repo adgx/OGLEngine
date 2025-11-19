@@ -2,11 +2,15 @@
 #include "log.h"
 
 namespace SpaceEngine{
+    //static functions
+    static void joystick_callback(int jid, int event);
+    
     App::App()
     {
-        setUpGLFW();
         //initialize Managers
         logManager.Initialize();
+        windowManager.Initialize();
+        inputManager.Initialize();
         //Objects
         scene = new Scene();
         renderer = new Renderer();
@@ -16,65 +20,28 @@ namespace SpaceEngine{
     App::~App()
     {
         //Shutdown Managers
+        windowManager.Shutdown();
+        inputManager.Shutdown();
         logManager.Shoutdown();
         delete scene;
         delete renderer;
-        glfwTerminate();
     }
 
     void App::Run()
     {
         SPACE_ENGINE_DEBUG("App - GameLoop"); 
-
-        while(!glfwWindowShouldClose(window))
+        while(!windowManager.WindowShouldCLose())
         {
-            handelInput();
+            inputManager.Update();
+            if(Mouse::button(SPACE_ENGINE_MOUSE_BUTTON_LEFT))
+                SPACE_ENGINE_DEBUG("Left mouse button pressed");
+            if(Mouse::button(SPACE_ENGINE_MOUSE_BUTTON_RIGHT))
+                SPACE_ENGINE_DEBUG("Right mouse button pressed");
             glClearColor(0.f, 0.f, 0.f, 1.f);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            glfwPollEvents();
-            glfwSwapBuffers(window);
+            windowManager.PollEvents();
+            windowManager.SwapBuffers();
         }
     }
-
-    void App::handelInput()
-    {
-        if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, true);
-    }
-
-    bool App::setUpGLFW()
-    {
-        SPACE_ENGINE_TRACE("App - set up GLFW");
-        glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-        window = glfwCreateWindow(640, 480, "Spaceship", NULL, NULL);
-
-        if(window == nullptr)
-        {
-            SPACE_ENGINE_ERROR("Failed to create GLFW window");
-            return false;
-        }
-
-        glfwMakeContextCurrent(window);
-
-        int version = gladLoadGL(glfwGetProcAddress);
-
-        if(version == 0)
-        {
-            SPACE_ENGINE_ERROR("Failed to initilize OpenGL Context");
-            return false;
-        }
-
-        glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height){
-            glViewport(0, 0, width, height);
-        });
-
-        SPACE_ENGINE_ERROR("App - GLFW setup done");
-        return true;
-    }
-
 };
