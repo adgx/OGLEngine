@@ -31,11 +31,13 @@ namespace SpaceEngine::Managers
 
 enum
 {
+    //mouse
     SPACE_ENGINE_MOUSE_BUTTON_FIRST,
     SPACE_ENGINE_MOUSE_BUTTON_LEFT = SPACE_ENGINE_MOUSE_BUTTON_FIRST,
     SPACE_ENGINE_MOUSE_BUTTON_RIGHT,
     SPACE_ENGINE_MOUSE_BUTTON_MIDDLE,
     SPACE_ENGINE_MOUSE_BUTTON_LAST = SPACE_ENGINE_MOUSE_BUTTON_MIDDLE,
+    //keyboard
     SPACE_ENGINE_KEY_BUTTON_0=48,
     SPACE_ENGINE_KEY_BUTTON_1=49,
     SPACE_ENGINE_KEY_BUTTON_2=50,
@@ -82,20 +84,18 @@ namespace SpaceEngine
     class Mouse
     {
         public:
-        static void init();
-        //static void update();
-        inline static int getPosX() { return x;}
-        inline static int getPosY() {return y;}
-        static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> buttons;
-        static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> buttonsLast;
-        static bool button(int id);
-        static bool buttonDown(int id);
-        static bool buttonUp(int id);
+            static void init();
+            //static void update();
+            inline static int getPosX() { return x;}
+            inline static int getPosY() {return y;}
+            static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> buttons;
+            static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> buttonsLast;
+            static bool button(int id);
+            static bool buttonDown(int id);
+            static bool buttonUp(int id);
         private:
-        constexpr static const int ButtonCount = 3;
-
-        static int x;
-        static int y;
+            static int x;
+            static int y;
 
         
     };
@@ -104,13 +104,12 @@ namespace SpaceEngine
     {
         public:
         static void init();
-        //static void update();
-        static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> keys;
-        static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> keysLast;
-        static bool keys(int id);
-        static bool keysDown(int id);
-        static bool keysUp(int id);
+        static std::unordered_map<int, bool> keys;
+        static std::unordered_map<int, bool> keysLast;
+        static bool key(int id);
+        static bool keyDown(int id);
+        static bool keyUp(int id);
         private:
-        constexpr static const int ButtonCount = 3;       
+        constexpr static const int KeysCount = 43; 
     };
 }
