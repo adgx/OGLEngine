@@ -25,7 +25,6 @@ namespace SpaceEngine::Managers
 
             static int height, width;
             static int xpos, ypos;
-            static float aspectRatio;
             static GLFWwindow* window;
             static GLFWmonitor* monitor;
             static bool fullScreenState;
