@@ -36,7 +36,14 @@ namespace SpaceEngine
     {
         if(id >= SPACE_ENGINE_MOUSE_BUTTON_FIRST &&
             id <= SPACE_ENGINE_MOUSE_BUTTON_LAST)
-            return Mouse::buttons[id] && !Mouse::buttonsLast[id];
+        {
+            //SPACE_ENGINE_DEBUG("buttonsLast: {}, buttons:{}", Mouse::buttonsLast[id], Mouse::buttons[id]);
+            if(Mouse::buttons[id] && !Mouse::buttonsLast[id])
+            {
+                buttonsLast[id]=buttons[id];
+                return true;
+            }
+        }
         return false;
     }
 
@@ -163,11 +170,13 @@ namespace SpaceEngine
         if(buttonID >= SPACE_ENGINE_MOUSE_BUTTON_FIRST &&
             buttonID <= SPACE_ENGINE_MOUSE_BUTTON_LAST)
         {
+            SPACE_ENGINE_DEBUG("buttonsLast: {}, buttons:{}", Mouse::buttonsLast[buttonID], Mouse::buttons[buttonID]);
             Mouse::buttonsLast[buttonID] = Mouse::buttons[buttonID];
 
             if(action == GLFW_PRESS)
             {
                 Mouse::buttons[buttonID] = true;
+                SPACE_ENGINE_DEBUG("Mouse button pressed");
             }
             else if(action == GLFW_RELEASE)
             {
@@ -191,6 +200,7 @@ namespace SpaceEngine
 
             if(action == GLFW_PRESS)
             {
+                
                 Keyboard::keys[key] = true;
             }
             else if(action == GLFW_RELEASE)
