@@ -7,6 +7,7 @@ namespace SpaceEngine
     //callbacks
     static void joystick_callback(int jid, int event);
     static void mouse_button_callback(GLFWwindow* window, int buttonID, int action, int mods);
+    static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
     static void keyboard_button_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     
     //Mouse
@@ -151,6 +152,12 @@ namespace SpaceEngine
         else SPACE_ENGINE_ERROR("InputManager - Mouse button is not handled");
     }
 
+    static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+    {
+        Mouse::x = static_cast<int>(xpos);
+        Mouse::y = static_cast<int>(xpos);
+    }
+
     static void keyboard_button_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
         if(Keyboard::keys.contains(key))
@@ -168,4 +175,6 @@ namespace SpaceEngine
         }
         else SPACE_ENGINE_ERROR("InputManager - Key is not handled");
     }
+
+    
 }

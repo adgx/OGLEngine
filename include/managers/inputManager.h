@@ -93,11 +93,8 @@ namespace SpaceEngine
             static bool button(int id);
             static bool buttonDown(int id);
             static bool buttonUp(int id);
-        private:
             static int x;
             static int y;
-
-        
     };
 
     class Keyboard
