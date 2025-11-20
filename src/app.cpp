@@ -30,16 +30,30 @@ namespace SpaceEngine{
     void App::Run()
     {
         SPACE_ENGINE_DEBUG("App - GameLoop"); 
-        while(!windowManager.WindowShouldCLose())
+        while(!windowManager.WindowShouldClose())
         {
+            //token debug stuff
+            bool token = false;
             inputManager.Update();
+            #if 0
             if(Mouse::button(SPACE_ENGINE_MOUSE_BUTTON_LEFT))
                 SPACE_ENGINE_DEBUG("Left mouse button pressed");
             if(Mouse::button(SPACE_ENGINE_MOUSE_BUTTON_RIGHT))
                 SPACE_ENGINE_DEBUG("Right mouse button pressed");
+            #endif
+            //fast debug for windowed and fullwindow feature
+            if(!token && Keyboard::keyDown(SPACE_ENGINE_KEY_BUTTON_ESCAPE) && Managers::Window::fullScreenState)
+            {
+                token = true;
+                windowManager.Windowed();
+            }
+            else if(!token && Keyboard::keyDown(SPACE_ENGINE_KEY_BUTTON_ESCAPE) && !Managers::Window::fullScreenState)
+            {
+                windowManager.SetWindowShouldClose();
+            }
             glClearColor(0.f, 0.f, 0.f, 1.f);
             glClear(GL_COLOR_BUFFER_BIT);
-
+    
             windowManager.PollEvents();
             windowManager.SwapBuffers();
         }

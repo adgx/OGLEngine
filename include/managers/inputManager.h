@@ -2,33 +2,6 @@
 #include <array>
 #include <unordered_map>
 
-namespace SpaceEngine::Managers
-{
-
-    class GameObject;
-    class Input
-    {
-        public:
-            void Initialize();
-            void Update();
-            void Shutdown();
-    };
-    class Command
-    {
-        public:
-        virtual ~Command(){}
-        virtual void Execute(GameObject gameobj) = 0;
-    };
-
-    class InputHandler
-    {
-
-    };
-
-
-
-};
-
 enum
 {
     //mouse
@@ -74,9 +47,38 @@ enum
   	SPACE_ENGINE_KEY_BUTTON_X=88,
   	SPACE_ENGINE_KEY_BUTTON_Y=89,
     SPACE_ENGINE_KEY_BUTTON_Z=90,
+    //function keys
     SPACE_ENGINE_KEY_BUTTON_ENTER=257,
     SPACE_ENGINE_KEY_BUTTON_SPACE=32,
-    SPACE_ENGINE_KEY_BUTTON_BACKSPACE=259
+    SPACE_ENGINE_KEY_BUTTON_BACKSPACE=259,
+    SPACE_ENGINE_KEY_BUTTON_ESCAPE=256
+};
+
+namespace SpaceEngine::Managers
+{
+
+    class GameObject;
+    class Input
+    {
+        public:
+            void Initialize();
+            void Update();
+            void Shutdown();
+    };
+    class Command
+    {
+        public:
+        virtual ~Command(){}
+        virtual void Execute(GameObject gameobj) = 0;
+    };
+
+    class InputHandler
+    {
+
+    };
+
+
+
 };
 
 namespace SpaceEngine
@@ -103,6 +105,19 @@ namespace SpaceEngine
     };
 
     class Keyboard
+    {
+        public:
+        static void init();
+        static std::unordered_map<int, bool> keys;
+        static std::unordered_map<int, bool> keysLast;
+        static bool key(int id);
+        static bool keyDown(int id);
+        static bool keyUp(int id);
+        private:
+        constexpr static const int KeysCount = 43; 
+    };
+
+    class Joystick
     {
         public:
         static void init();

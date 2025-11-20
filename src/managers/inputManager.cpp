@@ -15,7 +15,7 @@ namespace SpaceEngine
     std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> Mouse::buttonsLast;
     int Mouse::x = 0;
     int Mouse::y = 0;
-    bool cursorHideState = false;
+    bool Mouse::cursorHideState = false;
 
     void Mouse::init()
     {
@@ -88,9 +88,11 @@ namespace SpaceEngine
         Keyboard::keys[SPACE_ENGINE_KEY_BUTTON_ENTER]=false;
         Keyboard::keys[SPACE_ENGINE_KEY_BUTTON_SPACE]=false;
         Keyboard::keys[SPACE_ENGINE_KEY_BUTTON_BACKSPACE]=false;
+        Keyboard::keys[SPACE_ENGINE_KEY_BUTTON_ESCAPE]=false;
         Keyboard::keysLast[SPACE_ENGINE_KEY_BUTTON_ENTER]=false;
         Keyboard::keysLast[SPACE_ENGINE_KEY_BUTTON_SPACE]=false;
         Keyboard::keysLast[SPACE_ENGINE_KEY_BUTTON_BACKSPACE]=false;
+        Keyboard::keysLast[SPACE_ENGINE_KEY_BUTTON_ESCAPE]=false;
     }
 
     bool Keyboard::key(int id)
@@ -127,6 +129,8 @@ namespace SpaceEngine
         //callbacks for handling the input
         glfwSetJoystickCallback(joystick_callback);
         glfwSetMouseButtonCallback(Managers::Window::window, mouse_button_callback);
+        glfwSetCursorPosCallback(Managers::Window::window, cursor_position_callback);
+        glfwSetKeyCallback(Managers::Window::window, keyboard_button_callback);
     }
 
     
