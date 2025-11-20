@@ -53,10 +53,33 @@ enum
     SPACE_ENGINE_KEY_BUTTON_BACKSPACE=259,
     SPACE_ENGINE_KEY_BUTTON_ESCAPE=256
 };
+enum
+{
+    //joystick buttons
+    SPACE_ENGINE_BUTTON_A=0, 
+    SPACE_ENGINE_BUTTON_B=1,
+    SPACE_ENGINE_BUTTON_X=2,
+    SPACE_ENGINE_BUTTON_Y=3,
+    SPACE_ENGINE_BUTTON_LEFT_BUMPER=4,
+    SPACE_ENGINE_BUTTON_RIGHT_BUMPER=5,
+    SPACE_ENGINE_BUTTON_BACK=6,
+    SPACE_ENGINE_BUTTON_START=7,
+    SPACE_ENGINE_BUTTON_GUIDE=8,
+    SPACE_ENGINE_BUTTON_LEFT_THUMB=9,
+    SPACE_ENGINE_BUTTON_RIGHT_THUMB=10,
+    SPACE_ENGINE_BUTTON_DPAD_UP=11,
+    SPACE_ENGINE_BUTTON_DPAD_RIGHT=12,
+    SPACE_ENGINE_BUTTON_DPAD_DOWN=13,
+    SPACE_ENGINE_BUTTON_DPAD_LEFT=14,
+    SPACE_ENGINE_BUTTON_CROSS=SPACE_ENGINE_BUTTON_A,
+    SPACE_ENGINE_BUTTON_CIRCLE=SPACE_ENGINE_BUTTON_B,
+    SPACE_ENGINE_BUTTON_SQUARE=SPACE_ENGINE_BUTTON_X,
+    SPACE_ENGINE_BUTTON_TRIANGLE=SPACE_ENGINE_BUTTON_Y,
+};
 
 namespace SpaceEngine::Managers
 {
-
+    
     class GameObject;
     class Input
     {
@@ -113,8 +136,6 @@ namespace SpaceEngine
         static bool key(int id);
         static bool keyDown(int id);
         static bool keyUp(int id);
-        private:
-        constexpr static const int KeysCount = 43; 
     };
 
     class Joystick
@@ -126,7 +147,5 @@ namespace SpaceEngine
         static bool key(int id);
         static bool keyDown(int id);
         static bool keyUp(int id);
-        private:
-        constexpr static const int KeysCount = 43; 
     };
 }
