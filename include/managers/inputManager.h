@@ -85,16 +85,21 @@ namespace SpaceEngine
     {
         public:
             static void init();
-            //static void update();
             inline static int getPosX() { return x;}
             inline static int getPosY() {return y;}
-            static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> buttons;
-            static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> buttonsLast;
+            static void hideCursor();
+            static void showCursor();
+            static bool isHidenCursor();
             static bool button(int id);
             static bool buttonDown(int id);
             static bool buttonUp(int id);
+
+            static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> buttons;
+            static std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> buttonsLast;
             static int x;
             static int y;
+        private:
+            static bool cursorHideState;
     };
 
     class Keyboard

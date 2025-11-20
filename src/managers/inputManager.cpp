@@ -11,13 +11,15 @@ namespace SpaceEngine
     static void keyboard_button_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     
     //Mouse
-    int Mouse::x = 0;
-    int Mouse::y = 0;
     std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> Mouse::buttons;
     std::array<bool, SPACE_ENGINE_MOUSE_BUTTON_LAST+1> Mouse::buttonsLast;
-    
+    int Mouse::x = 0;
+    int Mouse::y = 0;
+    bool cursorHideState = false;
+
     void Mouse::init()
     {
+        Mouse::showCursor();
         std::fill(Mouse::buttons.begin(), Mouse::buttons.end(), false);
         std::fill(Mouse::buttonsLast.begin(), Mouse::buttonsLast.end(), false);
     }
@@ -45,6 +47,24 @@ namespace SpaceEngine
             return !Mouse::buttons[id] && Mouse::buttonsLast[id];
         return false;
     }
+
+    void Mouse::hideCursor()
+    {
+        glfwSetInputMode(Managers::Window::window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        Mouse::cursorHideState = true;
+    }
+
+    void Mouse::showCursor()
+    {
+        glfwSetInputMode(Managers::Window::window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        Mouse::cursorHideState = false;
+    }
+
+    bool Mouse::isHidenCursor()
+    {
+        return Mouse::cursorHideState;
+    }
+
     //Keyboard
     std::unordered_map<int, bool> Keyboard::keys;
     std::unordered_map<int, bool> Keyboard::keysLast;
@@ -91,6 +111,7 @@ namespace SpaceEngine
             return Keyboard::keysLast[id] && !Keyboard::keys[id];
         return false;
     }
+
     //managers::Input
     void Managers::Input::Initialize()
     {
