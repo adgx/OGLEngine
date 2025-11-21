@@ -19,16 +19,16 @@ namespace SpaceEngine
 
     void Mouse::init()
     {
-        Mouse::showCursor();
-        std::fill(Mouse::buttons.begin(), Mouse::buttons.end(), false);
-        std::fill(Mouse::buttonsLast.begin(), Mouse::buttonsLast.end(), false);
+        showCursor();
+        std::fill(buttons.begin(), buttons.end(), false);
+        std::fill(buttonsLast.begin(), buttonsLast.end(), false);
     }
 
     bool Mouse::button(int id)
     {
         if(id >= SPACE_ENGINE_MOUSE_BUTTON_FIRST &&
             id <= SPACE_ENGINE_MOUSE_BUTTON_LAST)
-            return Mouse::buttons[id];
+            return buttons[id];
         return false;
     }
 
@@ -37,8 +37,7 @@ namespace SpaceEngine
         if(id >= SPACE_ENGINE_MOUSE_BUTTON_FIRST &&
             id <= SPACE_ENGINE_MOUSE_BUTTON_LAST)
         {
-            //SPACE_ENGINE_DEBUG("buttonsLast: {}, buttons:{}", Mouse::buttonsLast[id], Mouse::buttons[id]);
-            if(Mouse::buttons[id] && !Mouse::buttonsLast[id])
+            if(buttons[id] && !buttonsLast[id])
             {
                 buttonsLast[id]=buttons[id];
                 return true;
@@ -51,25 +50,25 @@ namespace SpaceEngine
     {
         if(id >= SPACE_ENGINE_MOUSE_BUTTON_FIRST &&
             id <= SPACE_ENGINE_MOUSE_BUTTON_LAST)
-            return !Mouse::buttons[id] && Mouse::buttonsLast[id];
+            return !buttons[id] && buttonsLast[id];
         return false;
     }
 
     void Mouse::hideCursor()
     {
         glfwSetInputMode(Managers::Window::window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-        Mouse::cursorHideState = true;
+        cursorHideState = true;
     }
 
     void Mouse::showCursor()
     {
         glfwSetInputMode(Managers::Window::window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        Mouse::cursorHideState = false;
+        cursorHideState = false;
     }
 
     bool Mouse::isHidenCursor()
     {
-        return Mouse::cursorHideState;
+        return cursorHideState;
     }
 
     //Keyboard
@@ -81,43 +80,43 @@ namespace SpaceEngine
         //numerical keys
         for(int k = SPACE_ENGINE_KEY_BUTTON_0; k <= SPACE_ENGINE_KEY_BUTTON_9; k++)
         {
-            Keyboard::keys[k]=false;
-            Keyboard::keysLast[k]=false;
+            keys[k]=false;
+            keysLast[k]=false;
         }
 
         //alphabetic keys
         for(int k = SPACE_ENGINE_KEY_BUTTON_A; k <= SPACE_ENGINE_KEY_BUTTON_Z; k++)
         {
-            Keyboard::keys[k]=false;
-            Keyboard::keysLast[k]=false;
+            keys[k]=false;
+            keysLast[k]=false;
         }
         //special keys
-        Keyboard::keys[SPACE_ENGINE_KEY_BUTTON_ENTER]=false;
-        Keyboard::keys[SPACE_ENGINE_KEY_BUTTON_SPACE]=false;
-        Keyboard::keys[SPACE_ENGINE_KEY_BUTTON_BACKSPACE]=false;
-        Keyboard::keys[SPACE_ENGINE_KEY_BUTTON_ESCAPE]=false;
-        Keyboard::keysLast[SPACE_ENGINE_KEY_BUTTON_ENTER]=false;
-        Keyboard::keysLast[SPACE_ENGINE_KEY_BUTTON_SPACE]=false;
-        Keyboard::keysLast[SPACE_ENGINE_KEY_BUTTON_BACKSPACE]=false;
-        Keyboard::keysLast[SPACE_ENGINE_KEY_BUTTON_ESCAPE]=false;
+        keys[SPACE_ENGINE_KEY_BUTTON_ENTER]=false;
+        keys[SPACE_ENGINE_KEY_BUTTON_SPACE]=false;
+        keys[SPACE_ENGINE_KEY_BUTTON_BACKSPACE]=false;
+        keys[SPACE_ENGINE_KEY_BUTTON_ESCAPE]=false;
+        keysLast[SPACE_ENGINE_KEY_BUTTON_ENTER]=false;
+        keysLast[SPACE_ENGINE_KEY_BUTTON_SPACE]=false;
+        keysLast[SPACE_ENGINE_KEY_BUTTON_BACKSPACE]=false;
+        keysLast[SPACE_ENGINE_KEY_BUTTON_ESCAPE]=false;
     }
 
     bool Keyboard::key(int id)
     {
         if(keys.contains(id))
-            return Keyboard::keys[id];
+            return keys[id];
         return false;
     }
     bool Keyboard::keyDown(int id)
     {
         if(keys.contains(id))
-            return Keyboard::keys[id] && !Keyboard::keysLast[id];
+            return keys[id] && !keysLast[id];
         return false;
     }
     bool Keyboard::keyUp(int id)
     {
         if(keys.contains(id))
-            return Keyboard::keysLast[id] && !Keyboard::keys[id];
+            return keysLast[id] && !keys[id];
         return false;
     }
 
@@ -127,9 +126,13 @@ namespace SpaceEngine
         Mouse::init();
         Keyboard::init();
 
+        //check if the joystick just is present at the startup
         if(glfwJoystickPresent(GLFW_JOYSTICK_1) == GLFW_TRUE)
         {
             SPACE_ENGINE_INFO("Joystick detected: ID={}", GLFW_JOYSTICK_1);
+            Joystick::setDeadzone(true);
+            Joystick::setClamp(true);
+            Joystick::init();
         }
         else SPACE_ENGINE_ERROR("No joystick detected");
         
@@ -143,25 +146,170 @@ namespace SpaceEngine
     
     void Managers::Input::Update()
     {
-        
+        Joystick::update();
     }
 
     
     void Managers::Input::Shutdown()
     {
-
+        Joystick::destroy();
     }
 
+    //Joystick
+    bool Joystick::deadzone = false;
+    bool Joystick::clamp = false;
+    std::unique_ptr<Joystick::Controller> Joystick::controller = nullptr;
+
+    void Joystick::init()
+    {
+        SPACE_ENGINE_ASSERT(controller == nullptr, "Controller is not nullptr");
+        if(!controller)
+        {
+            controller = std::make_unique<Controller>();
+            controller->cID = 0;
+            std::fill(controller->buttons.begin(), controller->buttons.end(), false);
+            std::fill(controller->buttonsLast.begin(), controller->buttonsLast.end(), false);
+            std::fill(controller->axies.begin(), controller->axies.end(), .0f);
+            std::fill(controller->axiesLast.begin(), controller->axiesLast.end(), .0f);
+        }
+    }
+
+    void Joystick::update()
+    {
+        if(controller)
+        {
+            GLFWgamepadstate state;
+            if(glfwGetGamepadState(controller->cID, &state))
+            {
+                for(int i = SPACE_ENGINE_JK_BUTTON_FIRST; i < SPACE_ENGINE_JK_BUTTON_LAST; i++)
+                {
+                    controller->buttonsLast[i]=controller->buttons[i];
+                    controller->buttons[i]=static_cast<bool>(state.buttons[i]);
+                }
+
+                for(int i = SPACE_ENGINE_JK_AXIS_FIRST; i < SPACE_ENGINE_JK_AXIS_LAST; i++)
+                {
+                    controller->axiesLast[i]=controller->axies[i];
+                    controller->axies[i]=state.axes[i];
+                }
+            }
+        }
+    }
+
+    void Joystick::destroy()
+    {
+        if(controller)
+        {
+            controller.reset();
+        }
+    }  
+
+    bool Joystick::button(int id)
+    {
+        if(controller)
+        {
+            if(id>=SPACE_ENGINE_JK_BUTTON_FIRST && id <=SPACE_ENGINE_JK_BUTTON_LAST)
+            {
+                return controller->buttons[id];
+            }
+            else SPACE_ENGINE_ERROR("Button is not found");
+        }
+        return false;
+    }
+
+    bool Joystick::buttonDown(int id)
+    {
+        if(controller)
+        {
+            if(id>=SPACE_ENGINE_JK_BUTTON_FIRST && id <=SPACE_ENGINE_JK_BUTTON_LAST)
+            {
+                return controller->buttons[id] && !controller->buttonsLast[id];
+            }
+            else SPACE_ENGINE_ERROR("Button is not found");
+        }
+        return false;
+    }
+
+    bool Joystick::buttonUp(int id)
+    {
+        if(controller)
+        {
+            if(id>=SPACE_ENGINE_JK_BUTTON_FIRST && id <=SPACE_ENGINE_JK_BUTTON_LAST)
+            {
+                return controller->buttonsLast[id] && !controller->buttons[id];
+            }
+            else SPACE_ENGINE_ERROR("Button is not found");
+        }
+        return false;
+    }
+
+    float Joystick::axis(int id)
+    {
+        if(controller)
+        {
+            if(id>=SPACE_ENGINE_JK_AXIS_FIRST && id <=SPACE_ENGINE_JK_AXIS_LAST)
+            {
+                float val = controller->axies[id];
+
+                if((deadzone) && std::fabs(val) < deadzoneVal)
+                    return 0.f;
+                else if(clamp)
+                    return (val < 0) ? -1.f : (val > 0) ? 1.f : .0f;
+                return val;
+
+            }
+            else SPACE_ENGINE_ERROR("Axis is not found");
+        }
+        return std::numeric_limits<float>::lowest();
+    }
+
+    void Joystick::setDeadzone(bool flag)
+    {
+        deadzone = flag;
+    }
+
+    void Joystick::setClamp(bool flag)
+    {
+        clamp = flag;
+    }
+
+    bool Joystick::getDeadzone()
+    {
+        return deadzone;
+    }
+
+    bool Joystick::getClamp()
+    {
+        return clamp;
+    }
+    
     //callbacks
     static void joystick_callback(int jid, int event)
     {
-        if(event == GLFW_CONNECTED)
+        if(jid == 0)
         {
-            SPACE_ENGINE_INFO("Joystick connected: ID={}", jid);
+            if(event == GLFW_CONNECTED)
+            {
+                SPACE_ENGINE_INFO("Joystick connected: ID={}", jid);
+                Joystick::init();
+            }
+            else if(event == GLFW_DISCONNECTED)
+            {
+                SPACE_ENGINE_ERROR("Joystick disconnected: ID={}", jid);
+                Joystick::destroy();
+            }
         }
-        else if(event == GLFW_DISCONNECTED)
+        else if(jid != 0)
         {
-            SPACE_ENGINE_ERROR("Joystick disconnected: ID={}", jid);
+            if(event == GLFW_CONNECTED)
+            {
+                SPACE_ENGINE_ERROR("Joystick connected: ID={} but is not handled", jid);
+
+            }
+            else if(event == GLFW_DISCONNECTED)
+            {
+                SPACE_ENGINE_ERROR("Joystick disconnected: ID={}", jid);
+            }
         }
     }
 
@@ -209,7 +357,5 @@ namespace SpaceEngine
             }
         }
         else SPACE_ENGINE_ERROR("InputManager - Key is not handled");
-    }
-
-    
+    }   
 }

@@ -20,8 +20,8 @@ namespace SpaceEngine{
     App::~App()
     {
         //Shutdown Managers
-        windowManager.Shutdown();
         inputManager.Shutdown();
+        windowManager.Shutdown();
         logManager.Shoutdown();
         delete scene;
         delete renderer;
@@ -36,11 +36,20 @@ namespace SpaceEngine{
         {
             
             inputManager.Update();
+            //mouse debug
             #if 0
             if(Mouse::buttonDown(SPACE_ENGINE_MOUSE_BUTTON_LEFT))
                 SPACE_ENGINE_DEBUG("Left mouse button pressed");
             if(Mouse::buttonDown(SPACE_ENGINE_MOUSE_BUTTON_RIGHT))
                 SPACE_ENGINE_DEBUG("Right mouse button pressed");
+            #endif
+            #if 0
+            if(Joystick::buttonDown(SPACE_ENGINE_JK_BUTTON_A))
+                SPACE_ENGINE_DEBUG("Joystick: Pressed button A");
+            if(Joystick::buttonDown(SPACE_ENGINE_JK_BUTTON_B))
+                SPACE_ENGINE_DEBUG("Joystick: Pressed button B");
+            SPACE_ENGINE_DEBUG("Joystick: Left axis x:{} Left axis y:{}", Joystick::axis(SPACE_ENGINE_JK_AXIS_LEFT_X), 
+            Joystick::axis(SPACE_ENGINE_JK_AXIS_LEFT_Y));
             #endif
             //fast debug for windowed and fullwindow feature
             if(!token && Keyboard::keyDown(SPACE_ENGINE_KEY_BUTTON_ESCAPE) && Managers::Window::fullScreenState)

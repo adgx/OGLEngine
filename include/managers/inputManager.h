@@ -1,16 +1,17 @@
 #pragma once
 #include <array>
+#include <memory>
 #include <unordered_map>
 
 enum
 {
-    //mouse
+    //Mouse
     SPACE_ENGINE_MOUSE_BUTTON_FIRST,
     SPACE_ENGINE_MOUSE_BUTTON_LEFT = SPACE_ENGINE_MOUSE_BUTTON_FIRST,
     SPACE_ENGINE_MOUSE_BUTTON_RIGHT,
     SPACE_ENGINE_MOUSE_BUTTON_MIDDLE,
     SPACE_ENGINE_MOUSE_BUTTON_LAST = SPACE_ENGINE_MOUSE_BUTTON_MIDDLE,
-    //keyboard
+    //Keyboard
     SPACE_ENGINE_KEY_BUTTON_0=48,
     SPACE_ENGINE_KEY_BUTTON_1=49,
     SPACE_ENGINE_KEY_BUTTON_2=50,
@@ -47,13 +48,13 @@ enum
   	SPACE_ENGINE_KEY_BUTTON_X=88,
   	SPACE_ENGINE_KEY_BUTTON_Y=89,
     SPACE_ENGINE_KEY_BUTTON_Z=90,
-    //function keys
+    //Function keys
     SPACE_ENGINE_KEY_BUTTON_ESCAPE=256,
     SPACE_ENGINE_KEY_BUTTON_ENTER=257,
     SPACE_ENGINE_KEY_TAB=258,
     SPACE_ENGINE_KEY_BUTTON_BACKSPACE=259,
     SPACE_ENGINE_KEY_BUTTON_SPACE=32, 
-    //joystick buttons
+    //Joystick buttons
     SPACE_ENGINE_JK_BUTTON_A=0, 
     SPACE_ENGINE_JK_BUTTON_B=1,
     SPACE_ENGINE_JK_BUTTON_X=2,
@@ -151,14 +152,31 @@ namespace SpaceEngine
     class Joystick
     {
         public:
-        static void init();
-        static bool button(int id);
-        static bool axis(int id);  
-        static void update();
+            static void init();
+            static void update();
+            static void destroy();  
+            static bool button(int id);
+            static bool buttonDown(int id);
+            static bool buttonUp(int id);
+            static float axis(int id);
+            static void setDeadzone(bool flag);
+            static void setClamp(bool flag);
+            static bool getDeadzone();
+            static bool getClamp();
 
-        static std::array<int, SPACE_ENGINE_JK_BUTTON_LAST+1> buttons;
-        static std::array<int, SPACE_ENGINE_JK_BUTTON_LAST+1> buttonsLast;
-        static std::array<float, SPACE_ENGINE_JK_AXIS_LAST+1> axies;
-        static std::array<float, SPACE_ENGINE_JK_AXIS_LAST+1> axiesLast;
+            
+        private:
+            struct Controller
+            {
+                int cID = -1;
+                std::array<bool, SPACE_ENGINE_JK_BUTTON_LAST+1> buttons;
+                std::array<bool, SPACE_ENGINE_JK_BUTTON_LAST+1> buttonsLast;
+                std::array<float, SPACE_ENGINE_JK_AXIS_LAST+1> axies;
+                std::array<float, SPACE_ENGINE_JK_AXIS_LAST+1> axiesLast;
+            };
+            static bool deadzone;
+            static bool clamp;
+            constexpr static float deadzoneVal = 0.35f; 
+            static std::unique_ptr<Controller> controller;
     };
 }
