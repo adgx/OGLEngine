@@ -57,8 +57,8 @@ namespace SpaceEngine{
                 token = false;
             }
             glClearColor(0.f, 0.f, 0.f, 1.f);
-            glClear(GL_COLOR_BUFFER_BIT);
-    
+            //before rendering
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             windowManager.PollEvents();
             windowManager.SwapBuffers();
         }

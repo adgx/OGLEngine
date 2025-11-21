@@ -83,7 +83,8 @@ namespace SpaceEngine::Managers
             SPACE_ENGINE_ERROR("Failed to initilize OpenGL Context");
             return false;
         }
-
+        //set the OpenGL depth buffer
+        glEnable(GL_DEPTH_TEST);
         //set the OpenGL framebuffer
         glViewport(0, 0, SPACE_ENGINE_MIN_RES_W, SPACE_ENGINE_MIN_RES_H); 
         //callbacks
