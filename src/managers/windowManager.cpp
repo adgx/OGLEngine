@@ -42,6 +42,7 @@ namespace SpaceEngine::Managers
 		                        SPACE_ENGINE_MIN_RES_W,
                                 SPACE_ENGINE_MIN_RES_H,
 		                        0);
+            glViewport(0, 0, SPACE_ENGINE_MIN_RES_W, SPACE_ENGINE_MIN_RES_H);
         }
     }
 
@@ -83,6 +84,8 @@ namespace SpaceEngine::Managers
             return false;
         }
 
+        //set the OpenGL framebuffer
+        glViewport(0, 0, SPACE_ENGINE_MIN_RES_W, SPACE_ENGINE_MIN_RES_H); 
         //callbacks
         glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height){
             glViewport(0, 0, width, height);
@@ -140,6 +143,7 @@ namespace SpaceEngine::Managers
             Window::monitor = get_window_monitor(window);
             const GLFWvidmode* mode = glfwGetVideoMode(Window::monitor);
             glfwSetWindowMonitor(window, Window::monitor, 0, 0, SPACE_ENGINE_MAX_RES_W, SPACE_ENGINE_MAX_RES_H, mode->refreshRate);
+            glViewport(0, 0, SPACE_ENGINE_MAX_RES_W, SPACE_ENGINE_MAX_RES_H);
         }
         else
         {
