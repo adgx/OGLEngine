@@ -20,3 +20,12 @@ target_link_libraries(Main PRIVATE WindowManager
                         PRIVATE LogManager
                         PRIVATE InputManager)
 set_target_properties(App PROPERTIES FOLDER "App")
+
+#ShaderProgram
+add_library(ShaderProgram STATIC shader.cpp)
+target_link_libraries(ShaderProgram PUBLIC glad_gl_core_33
+    PRIVATE OpenGL::GL
+    PRIVATE LogManager
+    PRIVATE glm)
+target_include_directories(Main PRIVATE ${CMAKE_SOURCE_DIR}/include/)
+set_target_properties(ShaderProgram PROPERTIES FOLDER "ShaderProgram")
