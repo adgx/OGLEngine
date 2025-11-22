@@ -337,7 +337,7 @@ namespace SpaceEngine
     static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
     {
         Mouse::x = static_cast<int>(xpos);
-        Mouse::y = static_cast<int>(xpos);
+        Mouse::y = static_cast<int>(ypos);
     }
 
     static void keyboard_button_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
