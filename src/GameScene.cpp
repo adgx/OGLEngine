@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include <string>
+#include <glad/gl.h>
 
 namespace SpaceEngine{
     unsigned int GameScene::LoadCubemap(std::vector<string> faces){
