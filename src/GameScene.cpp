@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include <string>
 #include <glad/gl.h>
+#include "log.h"
 
 namespace SpaceEngine{
     unsigned int GameScene::LoadCubemap(std::vector<string> faces){
@@ -22,7 +23,7 @@ namespace SpaceEngine{
             }
             else
             {
-                cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+                SPACE_ENGINE_ERROR("Cubemap texture failed to load at path: {}", faces[i]);
                 stbi_image_free(data);
             }
         }

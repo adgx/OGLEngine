@@ -1,8 +1,7 @@
 #include "TitleScreen.h"
 #include "inputManager.h"
 #include "windowManager.h"
-#include <iostream>
-using namespace std;
+#include "log.h"
 
 
 // Helper to load an image file and create an OpenGL texture. Returns 0 on failure.
@@ -10,7 +9,7 @@ static unsigned int loadTextureFromFile(const char* path) {
     int width = 0, height = 0, channels = 4;
     unsigned char* data = stbi_load(path, &width, &height, &channels, 0);
     if (!data) {
-        cerr << "Failed to load texture: " << path << endl;
+        SPACE_ENGINE_ERROR("Failed to load texture: {}", path);
         return 0;
     }        
     GLenum format = GL_RGB;
@@ -29,7 +28,7 @@ static unsigned int loadTextureFromFile(const char* path) {
 namespace SpaceEngine{
 
     TitleScreen::TitleScreen(){
-        std::cout << "Title Screen opening..." << std::endl;
+        SPACE_ENGINE_DEBUG("Title Screen opening...");
     }
 
     TitleScreen::~TitleScreen(){
@@ -38,11 +37,11 @@ namespace SpaceEngine{
         if (texLeaderboard)glDeleteTextures(1, &texLeaderboard);
         if (texExit)       glDeleteTextures(1, &texExit);
         if (texLogo)       glDeleteTextures(1, &texLogo);
-        std::cout << "Going from Title Screen to another scene..." << std::endl;
+        SPACE_ENGINE_DEBUG("Going from Title Screen to another scene...");
     }
 
     void TitleScreen::Init(){
-        std::cout << "Loading textures..." << std::endl;
+        SPACE_ENGINE_DEBUG("Loading textures...");
 
         texStart      = loadTextureFromFile("assets/textures/Startbtn.png");
         texOptions    = loadTextureFromFile("assets/textures/Optionsbtn.png");
@@ -67,16 +66,16 @@ namespace SpaceEngine{
         m_buttons.push_back({ posX, 270.0f, btnW, btnH, texOptions,    TitleResult::OPTIONS,     false });
         m_buttons.push_back({ posX, 340.0f, btnW, btnH, texLeaderboard,TitleResult::LEADERBOARD, false });
         m_buttons.push_back({ posX, 410.0f, btnW, btnH, texExit,       TitleResult::EXIT,        false });
-        std::cout << "Bottoni caricati: " << m_buttons.size() << std::endl;
+        SPACE_ENGINE_INFO("Bottoni caricati: {}", m_buttons.size())
     }
 
     void TitleScreen::Render(){
-        cout<<"Rendering elements..."<<endl;
+        SPACE_ENGINE_DEBUG("Rendering elements...");
         //TODO
     }
 
     TitleResult TitleScreen::getInput(){
-        cout<<"Managing input from user"<<endl;
+        SPACE_ENGINE_DEBUG("Managing input from user");
         int mx = Mouse::x; 
         int my = Mouse::y;
 
@@ -90,22 +89,22 @@ namespace SpaceEngine{
             if(Mouse::buttonDown(0)){
                 switch (btn.action) {
                     case TitleResult::PLAY:
-                        cout<<"New Game starting..."<<endl;
+                        SPACE_ENGINE_DEBUG("New Game starting...");
                         return TitleResult::PLAY;
                         break;
 
                     case TitleResult::OPTIONS:
-                        cout<<"Opening options"<<endl;
+                        SPACE_ENGINE_DEBUG("Opening options");
                         return TitleResult::OPTIONS;
                         break;
 
                     case TitleResult::LEADERBOARD:
-                        cout<<"Opening Leaderboard"<<endl;
+                        SPACE_ENGINE_DEBUG("Opening Leaderboard");
                         return TitleResult::LEADERBOARD;
                         break;
 
                     case TitleResult::EXIT:
-                        cout<<"Quitting Game"<<endl;
+                        SPACE_ENGINE_DEBUG("Quitting Game");
                         return TitleResult::EXIT;
                         break;
                         

@@ -1,7 +1,6 @@
 #pragma once
 #include "utils/stb_image.h"
 #include <vector>
-#include <iostream>
 using namespace std;
 
 namespace SpaceEngine{
