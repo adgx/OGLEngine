@@ -52,7 +52,6 @@ namespace SpaceEngine
             
             void loadColors(const aiMaterial* pMaterial, int index);
             void populateBuffers();
-            void populateBuffersNonDSA();
             void render(IRenderCallbacks* pRenderCallbacks);
             void render(unsigned int drawIndex, unsigned int primID);
             void render(unsigned int numInstannes, const Matrix4* WVPMats, const Matrix4* worldMats);

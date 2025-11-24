@@ -41,13 +41,13 @@ namespace SpaceEngine
 
             std::string name;
 
-            Vector4 AmbientColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-            Vector4 DiffuseColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-            Vector4 SpecularColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-            Vector4 BaseColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-            Vector4 EmissiveColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-            Vector4 MetallicRoughnessNormalOcclusion = Vector4(1.0f);
-            Vector4 ClearCoatTransmissionThickness = Vector4(1.0f);
+            Vector4 ambientColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+            Vector4 diffuseColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+            Vector4 specularColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+            Vector4 baseColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+            Vector4 emissiveColor = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+            Vector4 metallicRoughnessNormalOcclusion = Vector4(1.0f);
+            Vector4 clearCoatTransmissionThickness = Vector4(1.0f);
 
             PBRMaterial PBRmaterial;
 

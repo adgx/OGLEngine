@@ -101,7 +101,6 @@ namespace SpaceEngine
         glTexParameteri(textureTarget, GL_TEXTURE_BASE_LEVEL, 0);
         glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        //glTexParameteri(m_textureTarget, GL_TEXTURE_WRAP_R, GL_REPEAT);
 
         glGenerateMipmap(textureTarget);
 

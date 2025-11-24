@@ -127,19 +127,21 @@ namespace SpaceEngine
             ret = initFromScene(pScene, fileName);
         }
 
+        return ret;
     }
 
     bool Mesh::initFromScene(const aiScene* pScene, const std::string& fileName)
     {
+        //number of the meshes in the scene
         meshes.resize(pScene->mNumMeshes);
         materials.resize(pScene->mNumMaterials);
 
-        unsigned int NumVertices = 0;
+        unsigned int numVertices = 0;
         unsigned int numIndices = 0;
-
-        countVerticesAndIndices(pScene, NumVertices, numIndices);
-
-        reserveSpace(NumVertices, numIndices);
+        //calculate the number of vertices and indices in the scene
+        countVerticesAndIndices(pScene, numVertices, numIndices);
+        //allocate space in the host
+        reserveSpace(numVertices, numIndices);
 
         initAllMeshes(pScene);
 
@@ -154,7 +156,8 @@ namespace SpaceEngine
 
     void Mesh::countVerticesAndIndices(const aiScene* pScene, unsigned int& numVertices, unsigned int& numIndices)
     {
-        for (unsigned int i = 0 ; i < meshes.size() ; i++) {
+        for (unsigned int i = 0 ; i < meshes.size() ; i++) 
+        {
             meshes[i].materialIndex = pScene->mMeshes[i]->mMaterialIndex;
             meshes[i].numIndices = pScene->mMeshes[i]->mNumFaces * 3;
             meshes[i].baseVertex = numVertices;
@@ -186,8 +189,7 @@ namespace SpaceEngine
     {
         const aiVector3D zero3D(0.0f, 0.0f, 0.0f);
 
-        // SPACE_ENGINE_INFO("Mesh {}", meshIndex);
-        // Populate the vertex attribute vectors
+        //populate the vertex attribute vectors
         Vertex v;
 
         for (unsigned int i = 0; i < paiMesh->mNumVertices; i++) {
@@ -199,8 +201,8 @@ namespace SpaceEngine
                 const aiVector3D& pNormal = paiMesh->mNormals[i];
                 v.normal = Vector3(pNormal.x, pNormal.y, pNormal.z);
             } else {
-                aiVector3D Normal(0.0f, 1.0f, 0.0f);
-                v.normal = Vector3(Normal.x, Normal.y, Normal.z);
+                aiVector3D normal(0.0f, 1.0f, 0.0f);
+                v.normal = Vector3(normal.x, normal.y, normal.z);
             }
 
             const aiVector3D& pTexCoord = paiMesh->HasTextureCoords(0) ? paiMesh->mTextureCoords[0][i] : zero3D;
@@ -209,7 +211,7 @@ namespace SpaceEngine
             vertices.push_back(v);
         }
 
-        // Populate the index buffer
+        //populate the index buffer
         for (unsigned int i = 0; i < paiMesh->mNumFaces; i++) {
             const aiFace& face = paiMesh->mFaces[i];
             indices.push_back(face.mIndices[0]);
@@ -499,50 +501,43 @@ namespace SpaceEngine
 
     void Mesh::loadColors(const aiMaterial* pMaterial, int index)
     {
-        aiColor4D AmbientColor(0.0f, 0.0f, 0.0f, 0.0f);
-        Vector4 AllOnes(1.0f);
+        aiColor4D ambientColor(0.0f, 0.0f, 0.0f, 0.0f);
+        Vector4 allOnes(1.0f);
 
-        int ShadingModel = 0;
-        if (pMaterial->Get(AI_MATKEY_SHADING_MODEL, ShadingModel) == AI_SUCCESS) {
-            SPACE_ENGINE_DEBUG("Shading model {}", ShadingModel);
+        int shadingModel = 0;
+        if (pMaterial->Get(AI_MATKEY_SHADING_MODEL, shadingModel) == AI_SUCCESS) {
+            SPACE_ENGINE_DEBUG("Shading model {}", shadingModel);
         }
 
-        if (pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, AmbientColor) == AI_SUCCESS) {
-            SPACE_ENGINE_INFO("Loaded ambient color [{} {} {}]", AmbientColor.r, AmbientColor.g, AmbientColor.b);
-            materials[index].AmbientColor.r = AmbientColor.r;
-            materials[index].AmbientColor.g = AmbientColor.g;
-            materials[index].AmbientColor.b = AmbientColor.b;
+        if (pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, ambientColor) == AI_SUCCESS) {
+            SPACE_ENGINE_INFO("Loaded ambient color [{} {} {}]", ambientColor.r, ambientColor.g, ambientColor.b);
+            materials[index].ambientColor.r = ambientColor.r;
+            materials[index].ambientColor.g = ambientColor.g;
+            materials[index].ambientColor.b = ambientColor.b;
         } else {
-            materials[index].AmbientColor = AllOnes;
+            materials[index].ambientColor = allOnes;
         }
 
-        aiColor3D DiffuseColor(0.0f, 0.0f, 0.0f);
+        aiColor3D diffuseColor(0.0f, 0.0f, 0.0f);
 
-        if (pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, DiffuseColor) == AI_SUCCESS) {
-            SPACE_ENGINE_INFO("Loaded diffuse color [{} {} {}]", DiffuseColor.r, DiffuseColor.g, DiffuseColor.b);
-            materials[index].DiffuseColor.r = DiffuseColor.r;
-            materials[index].DiffuseColor.g = DiffuseColor.g;
-            materials[index].DiffuseColor.b = DiffuseColor.b;
+        if (pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor) == AI_SUCCESS) {
+            SPACE_ENGINE_INFO("Loaded diffuse color [{} {} {}]", diffuseColor.r, diffuseColor.g, diffuseColor.b);
+            materials[index].diffuseColor.r = diffuseColor.r;
+            materials[index].diffuseColor.g = diffuseColor.g;
+            materials[index].diffuseColor.b = diffuseColor.b;
         }
 
-        aiColor3D SpecularColor(0.0f, 0.0f, 0.0f);
+        aiColor3D specularColor(0.0f, 0.0f, 0.0f);
 
-        if (pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, SpecularColor) == AI_SUCCESS) {
-            SPACE_ENGINE_INFO("Loaded specular color [{} {} {}]\n", SpecularColor.r, SpecularColor.g, SpecularColor.b);
-            materials[index].SpecularColor.r = SpecularColor.r;
-            materials[index].SpecularColor.g = SpecularColor.g;
-            materials[index].SpecularColor.b = SpecularColor.b;
+        if (pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, specularColor) == AI_SUCCESS) {
+            SPACE_ENGINE_INFO("Loaded specular color [{} {} {}]\n", specularColor.r, specularColor.g, specularColor.b);
+            materials[index].specularColor.r = specularColor.r;
+            materials[index].specularColor.g = specularColor.g;
+            materials[index].specularColor.b = specularColor.b;
         }
     }
-
 
     void Mesh::populateBuffers()
-    {
-        populateBuffersNonDSA();
-    }
-
-
-    void Mesh::populateBuffersNonDSA()
     {
         glBindBuffer(GL_ARRAY_BUFFER, buffers[VERTEX_BUFFER]);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[INDEX_BUFFER]);
@@ -564,8 +559,6 @@ namespace SpaceEngine
         glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(NumFloats * sizeof(float)));
     }
 
-
-    // Introduced in youtube tutorial #18
     void Mesh::render(IRenderCallbacks* pRenderCallbacks)
     {
         if (isPBR) {
@@ -596,18 +589,24 @@ namespace SpaceEngine
 
     void Mesh::setupRenderMaterialsPhong(unsigned int meshIndex, unsigned int materialIndex, IRenderCallbacks* pRenderCallbacks)
     {
-        if (materials[materialIndex].pTextures[TEXTURE_TYPE::BASE]) {
+        if (materials[materialIndex].pTextures[TEXTURE_TYPE::BASE]) 
+        {
             materials[materialIndex].pTextures[TEXTURE_TYPE::BASE]->bind(COLOR_TEXTURE_UNIT);
         }
 
-        if (materials[materialIndex].pTextures[TEXTURE_TYPE::SPECULAR]) {
+        if (materials[materialIndex].pTextures[TEXTURE_TYPE::SPECULAR]) 
+        {
             materials[materialIndex].pTextures[TEXTURE_TYPE::SPECULAR]->bind(SPECULAR_EXPONENT_UNIT);
 
-            if (pRenderCallbacks) {
+            if (pRenderCallbacks) 
+            {
                 pRenderCallbacks->controlSpecularExponent(true);
             }
-        } else {
-            if (pRenderCallbacks) {
+        } 
+        else 
+        {
+            if (pRenderCallbacks) 
+            {
                 pRenderCallbacks->controlSpecularExponent(false);
             }
         }
@@ -713,7 +712,7 @@ namespace SpaceEngine
     const Material& Mesh::getMaterial()
     {
         for (unsigned int i = 0 ; i < materials.size() ; i++) {
-            if (materials[i].AmbientColor != Vector4(0.0f)) {
+            if (materials[i].ambientColor != Vector4(0.0f)) {
                 return materials[i];
             }
         }
